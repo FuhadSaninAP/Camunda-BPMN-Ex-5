@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_LeaveRouting" name="Leave Routing" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.x" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
+  <decision id="leave-routing" name="Leave Approval Routing">
+    <decisionTable id="DT_LeaveRouting" hitPolicy="UNIQUE">
+      <input id="In_Valid" label="Dates valid?">
+        <inputExpression id="InExp_Valid" typeRef="boolean"><text>valid</text></inputExpression>
+      </input>
+      <input id="In_Days" label="Leave days">
+        <inputExpression id="InExp_Days" typeRef="number"><text>leaveDays</text></inputExpression>
+      </input>
+      <output id="Out_Route" label="Route" name="route" typeRef="string" />
+      <rule id="Rule_Reject">
+        <description>Past dates or return before start</description>
+        <inputEntry id="R1_valid"><text>false</text></inputEntry>
+        <inputEntry id="R1_days"><text></text></inputEntry>
+        <outputEntry id="R1_out"><text>"REJECT"</text></outputEntry>
+      </rule>
+      <rule id="Rule_Auto">
+        <description>Up to 2 days: auto-approved</description>
+        <inputEntry id="R2_valid"><text>true</text></inputEntry>
+        <inputEntry id="R2_days"><text>&lt;= 2</text></inputEntry>
+        <outputEntry id="R2_out"><text>"AUTO_APPROVE"</text></outputEntry>
+      </rule>
+      <rule id="Rule_FA">
+        <description>More than 2 days: Faculty Advisor decides</description>
+        <inputEntry id="R3_valid"><text>true</text></inputEntry>
+        <inputEntry id="R3_days"><text>&gt; 2</text></inputEntry>
+        <outputEntry id="R3_out"><text>"FA_APPROVAL"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_1">
+      <dmndi:DMNShape id="DMNShape_1" dmnElementRef="leave-routing"><dc:Bounds height="80" width="180" x="150" y="80" /></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
